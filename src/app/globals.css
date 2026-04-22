@@ -3,53 +3,51 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Caribbean (sky blue) */
-  --color-caribbean-50: #f0f9ff;
-  --color-caribbean-100: #e0f2fe;
-  --color-caribbean-200: #bae6fd;
-  --color-caribbean-300: #7dd3fc;
-  --color-caribbean-400: #38bdf8;
-  --color-caribbean-500: #0ea5e9;
-  --color-caribbean-600: #0284c7;
-  --color-caribbean-700: #0369a1;
-  --color-caribbean-800: #075985;
-  --color-caribbean-900: #0c4a6e;
-  --color-caribbean-950: #082f49;
+  /* ocean → true near-black / charcoal scale */
+  --color-ocean-50:  #fafafa;
+  --color-ocean-100: #f5f5f5;
+  --color-ocean-200: #e5e5e5;
+  --color-ocean-300: #d4d4d4;
+  --color-ocean-400: #a3a3a3;
+  --color-ocean-500: #737373;
+  --color-ocean-600: #525252;
+  --color-ocean-700: #404040;
+  --color-ocean-800: #262626;
+  --color-ocean-900: #171717;
+  --color-ocean-950: #0a0a0a;
 
-  /* Coral (orange) */
-  --color-coral-50: #fff7ed;
-  --color-coral-100: #ffedd5;
-  --color-coral-200: #fed7aa;
-  --color-coral-300: #fdba74;
-  --color-coral-400: #fb923c;
-  --color-coral-500: #f97316;
-  --color-coral-600: #ea580c;
-  --color-coral-700: #c2410c;
-  --color-coral-800: #9a3412;
-  --color-coral-900: #7c2d12;
+  /* caribbean → Antiguan royal blue */
+  --color-caribbean-50:  #eff4ff;
+  --color-caribbean-100: #dce8ff;
+  --color-caribbean-200: #b5cfff;
+  --color-caribbean-300: #7eaeff;
+  --color-caribbean-400: #4d8af5;
+  --color-caribbean-500: #1c5fd4;
+  --color-caribbean-600: #003087;
+  --color-caribbean-700: #002474;
+  --color-caribbean-800: #001855;
+  --color-caribbean-900: #000f38;
+  --color-caribbean-950: #00081e;
 
-  /* Reef (emerald green) */
-  --color-reef-50: #ecfdf5;
-  --color-reef-100: #d1fae5;
-  --color-reef-200: #a7f3d0;
-  --color-reef-300: #6ee7b7;
-  --color-reef-400: #34d399;
-  --color-reef-500: #10b981;
-  --color-reef-600: #059669;
-  --color-reef-700: #047857;
+  /* reef → Antiguan gold / sun */
+  --color-reef-50:  #fffbeb;
+  --color-reef-100: #fef3c7;
+  --color-reef-200: #fde68a;
+  --color-reef-300: #fcd34d;
+  --color-reef-400: #fbbf24;
+  --color-reef-500: #FAD54B;
+  --color-reef-600: #d97706;
+  --color-reef-700: #b45309;
 
-  /* Ocean (deep slate/navy) */
-  --color-ocean-50: #f8fafc;
-  --color-ocean-100: #f1f5f9;
-  --color-ocean-200: #e2e8f0;
-  --color-ocean-300: #cbd5e1;
-  --color-ocean-400: #94a3b8;
-  --color-ocean-500: #64748b;
-  --color-ocean-600: #475569;
-  --color-ocean-700: #334155;
-  --color-ocean-800: #1e293b;
-  --color-ocean-900: #0f172a;
-  --color-ocean-950: #020617;
+  /* coral → Antiguan crimson red (used sparingly) */
+  --color-coral-50:  #fff1f2;
+  --color-coral-100: #ffe4e6;
+  --color-coral-200: #fecdd3;
+  --color-coral-300: #fda4af;
+  --color-coral-400: #f87171;
+  --color-coral-500: #CE1126;
+  --color-coral-600: #b00f21;
+  --color-coral-700: #90001a;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --radius: 0.75rem;
@@ -57,24 +55,24 @@
 
 :root {
   --background: 0 0% 100%;
-  --foreground: 222 47% 11%;
+  --foreground: 0 0% 10%;
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 0 0% 10%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --primary: 199 89% 48%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 222 87% 47%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 47% 11%;
-  --destructive: 0 84% 60%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 10%;
+  --destructive: 350 88% 43%;
   --destructive-foreground: 0 0% 98%;
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 199 89% 48%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 222 87% 47%;
 }
 
 * {
@@ -91,6 +89,6 @@ body {
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 2px; }
 
-::selection { background: #0ea5e920; }
+::selection { background: #1c5fd420; }
