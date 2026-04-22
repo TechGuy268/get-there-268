@@ -2,6 +2,59 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  /* Caribbean (sky blue) */
+  --color-caribbean-50: #f0f9ff;
+  --color-caribbean-100: #e0f2fe;
+  --color-caribbean-200: #bae6fd;
+  --color-caribbean-300: #7dd3fc;
+  --color-caribbean-400: #38bdf8;
+  --color-caribbean-500: #0ea5e9;
+  --color-caribbean-600: #0284c7;
+  --color-caribbean-700: #0369a1;
+  --color-caribbean-800: #075985;
+  --color-caribbean-900: #0c4a6e;
+  --color-caribbean-950: #082f49;
+
+  /* Coral (orange) */
+  --color-coral-50: #fff7ed;
+  --color-coral-100: #ffedd5;
+  --color-coral-200: #fed7aa;
+  --color-coral-300: #fdba74;
+  --color-coral-400: #fb923c;
+  --color-coral-500: #f97316;
+  --color-coral-600: #ea580c;
+  --color-coral-700: #c2410c;
+  --color-coral-800: #9a3412;
+  --color-coral-900: #7c2d12;
+
+  /* Reef (emerald green) */
+  --color-reef-50: #ecfdf5;
+  --color-reef-100: #d1fae5;
+  --color-reef-200: #a7f3d0;
+  --color-reef-300: #6ee7b7;
+  --color-reef-400: #34d399;
+  --color-reef-500: #10b981;
+  --color-reef-600: #059669;
+  --color-reef-700: #047857;
+
+  /* Ocean (deep slate/navy) */
+  --color-ocean-50: #f8fafc;
+  --color-ocean-100: #f1f5f9;
+  --color-ocean-200: #e2e8f0;
+  --color-ocean-300: #cbd5e1;
+  --color-ocean-400: #94a3b8;
+  --color-ocean-500: #64748b;
+  --color-ocean-600: #475569;
+  --color-ocean-700: #334155;
+  --color-ocean-800: #1e293b;
+  --color-ocean-900: #0f172a;
+  --color-ocean-950: #020617;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --radius: 0.75rem;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
@@ -22,7 +75,6 @@
   --border: 214 32% 91%;
   --input: 214 32% 91%;
   --ring: 199 89% 48%;
-  --radius: 0.75rem;
 }
 
 * {
@@ -41,4 +93,4 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 2px; }
 
-::selection { background: hsl(199 89% 48% / 0.15); }
+::selection { background: #0ea5e920; }
