@@ -1,71 +1,42 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Zap } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Log in",
-  description: "Sign in to your GET THERE 268 account",
-};
+export const metadata: Metadata = { title: "Log in" };
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6">
-      <div className="w-full max-w-sm space-y-8">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="w-10 h-10 rounded-xl bg-caribbean-500 flex items-center justify-center">
-            <Zap className="w-5 h-5 text-white" strokeWidth={2.5} />
+    <div className="min-h-screen flex items-center justify-center bg-ocean-950 px-6">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col items-center gap-3 text-center mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-caribbean-500 flex items-center justify-center">
+            <Zap className="w-6 h-6 text-white" strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
-            <p className="text-sm text-muted-foreground mt-1">Sign in to GET THERE 268</p>
+            <h1 className="text-2xl font-bold text-white">Welcome back</h1>
+            <p className="text-ocean-400 text-sm mt-1">Sign in to GET THERE 268</p>
           </div>
         </div>
-
-        <form className="space-y-4">
+        <div className="bg-white rounded-3xl p-8 shadow-2xl space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@company.com"
-              autoComplete="email"
-              required
-              className="h-11"
-            />
+            <label htmlFor="email" className="text-sm font-medium text-ocean-700">Email</label>
+            <input id="email" type="email" placeholder="you@email.com" className="w-full h-12 px-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-caribbean-500 focus:border-transparent" />
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <Link href="/forgot-password" className="text-xs text-caribbean-600 hover:text-caribbean-700">
-                Forgot password?
-              </Link>
+            <div className="flex justify-between items-center">
+              <label htmlFor="password" className="text-sm font-medium text-ocean-700">Password</label>
+              <Link href="/forgot-password" className="text-xs text-caribbean-600 hover:text-caribbean-700">Forgot?</Link>
             </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="current-password"
-              required
-              className="h-11"
-            />
+            <input id="password" type="password" placeholder="••••••••" className="w-full h-12 px-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-caribbean-500 focus:border-transparent" />
           </div>
-          <Button
-            type="submit"
-            className="w-full h-11 bg-caribbean-500 hover:bg-caribbean-600 text-white"
-          >
+          <button className="w-full h-12 bg-ocean-900 hover:bg-ocean-800 text-white font-semibold rounded-xl transition-colors">
             Sign in
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-caribbean-600 hover:text-caribbean-700 font-medium">
-            Sign up free
-          </Link>
-        </p>
+          </button>
+          <p className="text-center text-sm text-muted-foreground">
+            New here?{" "}
+            <Link href="/signup" className="text-caribbean-600 font-semibold hover:text-caribbean-700">Create account</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

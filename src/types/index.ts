@@ -1,159 +1,109 @@
-export type UserRole = "ADMIN" | "ANALYST";
+export type Role = "RIDER" | "DRIVER" | "ADMIN";
+export type RideStatus = "REQUESTED" | "ACCEPTED" | "ARRIVING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+export type PayMethod = "CARD" | "CASH";
+export type PayStatus = "PENDING" | "PAID" | "FAILED";
 
 export interface User {
   id: string;
+  name: string;
   email: string;
-  name: string | null;
-  role: UserRole;
-  companyId: string;
+  phone?: string | null;
+  role: Role;
+  avatarUrl?: string | null;
+  driverProfile?: DriverProfile | null;
   createdAt: string;
 }
 
-export interface Company {
+export interface DriverProfile {
   id: string;
-  name: string;
-  createdAt: string;
+  userId: string;
+  licenseNumber: string;
+  vehicleMake: string;
+  vehicleModel: string;
+  vehiclePlate: string;
+  vehicleColor: string;
+  isOnline: boolean;
+  isApproved: boolean;
+  rating: number;
+  totalTrips: number;
+  currentLat?: number | null;
+  currentLng?: number | null;
 }
 
-export type DataSourceType =
-  | "POSTGRESQL"
-  | "MYSQL"
-  | "BIGQUERY"
-  | "SNOWFLAKE"
-  | "CSV"
-  | "API";
-
-export interface DataSource {
+export interface Ride {
   id: string;
-  name: string;
-  type: DataSourceType;
-  companyId: string;
-  schemaMetadata?: SchemaMetadata;
-  instructions?: string;
-  createdAt: string;
+  riderId: string;
+  rider?: User;
+  driverId?: string | null;
+  driver?: User | null;
+  pickupAddress: string;
+  pickupLat: number;
+  pickupLng: number;
+  destAddress: string;
+  destLat: number;
+  destLng: number;
+  status: RideStatus;
+  fareEstimate: number;
+  fareActual?: number | null;
+  paymentMethod: PayMethod;
+  distanceKm?: number | null;
+  durationMin?: number | null;
+  requestedAt: string;
+  acceptedAt?: string | null;
+  startedAt?: string | null;
+  completedAt?: string | null;
+  cancelledAt?: string | null;
+  messages?: Message[];
+  review?: Review | null;
+  payment?: Payment | null;
 }
 
-export interface SchemaMetadata {
-  tables: TableSchema[];
-  lastUpdated: string;
-}
-
-export interface TableSchema {
-  name: string;
-  columns: ColumnSchema[];
-  rowCount?: number;
-}
-
-export interface ColumnSchema {
-  name: string;
-  type: string;
-  nullable: boolean;
-  isPrimaryKey?: boolean;
-}
-
-export type ChartType = "bar" | "line" | "area" | "pie" | "table" | "number";
-
-export interface ChartData {
-  type: ChartType;
-  data: Record<string, unknown>[];
-  xKey?: string;
-  yKeys?: string[];
-  title?: string;
-}
-
-export interface QueryResult {
+export interface Message {
   id: string;
-  queryText: string;
-  generatedSql: string | null;
-  confidence: number | null;
-  chartType: ChartType | null;
-  chartData: ChartData | null;
-  nlAnswer: string | null;
-  rowCount: number;
-  executionTimeMs: number;
-  createdAt: string;
-}
-
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
+  rideId: string;
+  senderId: string;
+  sender?: User;
   content: string;
-  queryResult?: QueryResult;
-  isStreaming?: boolean;
-  timestamp: Date;
-}
-
-export interface Prompt {
-  id: string;
-  name: string;
-  template: string;
-  variables: PromptVariable[];
-  tags: string[];
-  companyId: string;
-  versions: PromptVersion[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface PromptVariable {
-  name: string;
-  type: "string" | "number" | "boolean";
-  defaultValue?: string;
-  description?: string;
-}
-
-export interface PromptVersion {
-  id: string;
-  promptId: string;
-  template: string;
-  notes?: string;
   createdAt: string;
 }
 
-export interface SemanticLayer {
+export interface Review {
   id: string;
-  companyId: string;
-  dataSourceId: string;
-  metrics: Metric[];
-  dimensions: Dimension[];
-  joins: Join[];
-  status: "DRAFT" | "PUBLISHED";
-  updatedAt: string;
+  rideId: string;
+  fromUserId: string;
+  toUserId: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
 }
 
-export interface Metric {
+export interface Payment {
   id: string;
-  name: string;
-  label: string;
-  sql: string;
-  format: "number" | "currency" | "percent";
-  description?: string;
+  rideId: string;
+  amount: number;
+  method: PayMethod;
+  status: PayStatus;
+  stripePaymentIntentId?: string | null;
+  createdAt: string;
 }
 
-export interface Dimension {
+export interface PricingConfig {
   id: string;
-  name: string;
-  label: string;
-  table: string;
-  column: string;
-  type: "string" | "number" | "date" | "boolean";
+  baseFare: number;
+  perKm: number;
+  perMinute: number;
+  surgeActive: boolean;
+  surgeMultiplier: number;
+  currency: string;
 }
 
-export interface Join {
-  id: string;
-  leftTable: string;
-  rightTable: string;
-  leftKey: string;
-  rightKey: string;
-  type: "INNER" | "LEFT" | "RIGHT";
-}
-
-export interface KPIMetric {
-  label: string;
-  value: string | number;
-  delta?: number;
-  deltaLabel?: string;
-  trend?: number[];
-  format?: "number" | "currency" | "percent";
-  icon?: string;
+export interface FareEstimate {
+  base: number;
+  distanceCharge: number;
+  timeCharge: number;
+  surge: number;
+  total: number;
+  distanceKm: number;
+  durationMin: number;
+  currency: string;
 }

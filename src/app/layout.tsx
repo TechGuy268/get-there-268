@@ -1,88 +1,36 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://getthere268.com"),
   title: {
-    default: "GET THERE 268 — AI-Powered Data Analytics Platform",
+    default: "GET THERE 268 — Ride-Hailing in Antigua & Barbuda",
     template: "%s | GET THERE 268",
   },
   description:
-    "Transform your data into decisions with GET THERE 268. The AI-native analytics platform for teams who move fast — natural language queries, live dashboards, semantic layer, and prompt engineering in one place.",
-  keywords: [
-    "data analytics",
-    "AI analytics",
-    "natural language SQL",
-    "business intelligence",
-    "dashboard",
-    "data visualization",
-    "Antigua",
-    "SaaS",
-    "prompt builder",
-    "semantic layer",
-  ],
-  authors: [{ name: "GET THERE 268" }],
-  creator: "GET THERE 268",
+    "The fastest way to get around Antigua & Barbuda. Book a ride in seconds with GET THERE 268 — safe, affordable, always on time.",
+  keywords: ["ride hailing", "Antigua", "Barbuda", "taxi", "transport", "268", "Caribbean"],
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://getthere268.com",
     siteName: "GET THERE 268",
-    title: "GET THERE 268 — AI-Powered Data Analytics Platform",
-    description:
-      "Transform your data into decisions. Natural language queries, live dashboards, semantic layer, and AI prompt engineering — all in one platform.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "GET THERE 268 — AI Analytics Platform",
-      },
-    ],
+    title: "GET THERE 268 — Ride-Hailing in Antigua & Barbuda",
+    description: "Book a ride anywhere in Antigua & Barbuda. Fast, safe, affordable.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "GET THERE 268 — AI-Powered Data Analytics Platform",
-    description:
-      "Transform your data into decisions with GET THERE 268. The AI-native analytics platform.",
+    title: "GET THERE 268 — Ride-Hailing in Antigua & Barbuda",
     images: ["/og-image.png"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="min-h-full bg-background text-foreground font-sans">
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         {children}
       </body>
     </html>

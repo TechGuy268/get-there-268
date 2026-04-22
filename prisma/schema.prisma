@@ -7,125 +7,142 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
+enum Role {
+  RIDER
+  DRIVER
   ADMIN
-  ANALYST
 }
 
-enum DataSourceType {
-  POSTGRESQL
-  MYSQL
-  BIGQUERY
-  SNOWFLAKE
-  CSV
-  API
+enum RideStatus {
+  REQUESTED
+  ACCEPTED
+  ARRIVING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
 
-enum LayerStatus {
-  DRAFT
-  PUBLISHED
+enum PayMethod {
+  CARD
+  CASH
 }
 
-model Company {
-  id          String       @id @default(cuid())
-  name        String
-  users       User[]
-  dataSources DataSource[]
-  prompts     Prompt[]
-  semanticLayers SemanticLayer[]
-  createdAt   DateTime     @default(now())
+enum PayStatus {
+  PENDING
+  PAID
+  FAILED
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  role      UserRole @default(ANALYST)
-  companyId String
-  company   Company  @relation(fields: [companyId], references: [id])
-  queries   Query[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([companyId])
-}
-
-model DataSource {
   id              String         @id @default(cuid())
   name            String
-  type            DataSourceType
-  companyId       String
-  company         Company        @relation(fields: [companyId], references: [id])
-  schemaMetadata  Json?
-  instructions    String?
-  configEncrypted String
-  queries         Query[]
-  semanticLayers  SemanticLayer[]
+  email           String         @unique
+  password        String
+  phone           String?
+  role            Role           @default(RIDER)
+  avatarUrl       String?
+  ridesAsRider    Ride[]         @relation("RiderRides")
+  ridesAsDriver   Ride[]         @relation("DriverRides")
+  driverProfile   DriverProfile?
+  messagesSent    Message[]
+  reviewsGiven    Review[]       @relation("ReviewFrom")
+  reviewsReceived Review[]       @relation("ReviewTo")
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
-
-  @@index([companyId])
 }
 
-model Query {
-  id           String      @id @default(cuid())
-  userId       String
-  user         User        @relation(fields: [userId], references: [id])
-  dataSourceId String?
-  dataSource   DataSource? @relation(fields: [dataSourceId], references: [id])
-  queryText    String
-  generatedSql String?
-  confidence   Float?
-  chartType    String?
-  chartData    Json?
-  nlAnswer     String?
-  rowCount     Int         @default(0)
-  executionMs  Int         @default(0)
-  createdAt    DateTime    @default(now())
-
-  @@index([userId])
-  @@index([dataSourceId])
+model DriverProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  licenseNumber   String
+  vehicleMake     String
+  vehicleModel    String
+  vehiclePlate    String
+  vehicleColor    String
+  isOnline        Boolean  @default(false)
+  isApproved      Boolean  @default(false)
+  rating          Float    @default(5.0)
+  totalTrips      Int      @default(0)
+  currentLat      Float?
+  currentLng      Float?
+  updatedAt       DateTime @updatedAt
 }
 
-model Prompt {
-  id        String          @id @default(cuid())
-  name      String
-  template  String
-  variables Json            @default("[]")
-  tags      String[]
-  companyId String
-  company   Company         @relation(fields: [companyId], references: [id])
-  versions  PromptVersion[]
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+model Ride {
+  id             String     @id @default(cuid())
+  riderId        String
+  rider          User       @relation("RiderRides", fields: [riderId], references: [id])
+  driverId       String?
+  driver         User?      @relation("DriverRides", fields: [driverId], references: [id])
+  pickupAddress  String
+  pickupLat      Float
+  pickupLng      Float
+  destAddress    String
+  destLat        Float
+  destLng        Float
+  status         RideStatus @default(REQUESTED)
+  fareEstimate   Float
+  fareActual     Float?
+  paymentMethod  PayMethod  @default(CASH)
+  distanceKm     Float?
+  durationMin    Float?
+  messages       Message[]
+  review         Review?
+  payment        Payment?
+  requestedAt    DateTime   @default(now())
+  acceptedAt     DateTime?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  cancelledAt    DateTime?
 
-  @@index([companyId])
+  @@index([riderId])
+  @@index([driverId])
+  @@index([status])
 }
 
-model PromptVersion {
+model Message {
   id        String   @id @default(cuid())
-  promptId  String
-  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
-  template  String
-  notes     String?
+  rideId    String
+  ride      Ride     @relation(fields: [rideId], references: [id])
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+  content   String
   createdAt DateTime @default(now())
 
-  @@index([promptId])
+  @@index([rideId])
 }
 
-model SemanticLayer {
-  id           String      @id @default(cuid())
-  companyId    String
-  company      Company     @relation(fields: [companyId], references: [id])
-  dataSourceId String
-  dataSource   DataSource  @relation(fields: [dataSourceId], references: [id])
-  metrics      Json        @default("[]")
-  dimensions   Json        @default("[]")
-  joins        Json        @default("[]")
-  status       LayerStatus @default(DRAFT)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+model Review {
+  id         String   @id @default(cuid())
+  rideId     String   @unique
+  ride       Ride     @relation(fields: [rideId], references: [id])
+  fromUserId String
+  from       User     @relation("ReviewFrom", fields: [fromUserId], references: [id])
+  toUserId   String
+  to         User     @relation("ReviewTo", fields: [toUserId], references: [id])
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+}
 
-  @@unique([companyId, dataSourceId])
-  @@index([companyId])
+model Payment {
+  id                    String    @id @default(cuid())
+  rideId                String    @unique
+  ride                  Ride      @relation(fields: [rideId], references: [id])
+  amount                Float
+  method                PayMethod
+  status                PayStatus @default(PENDING)
+  stripePaymentIntentId String?
+  createdAt             DateTime  @default(now())
+}
+
+model PricingConfig {
+  id              String  @id @default("default")
+  baseFare        Float   @default(3.00)
+  perKm           Float   @default(1.50)
+  perMinute       Float   @default(0.25)
+  surgeActive     Boolean @default(false)
+  surgeMultiplier Float   @default(1.0)
+  currency        String  @default("XCD")
 }

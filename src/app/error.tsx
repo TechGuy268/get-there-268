@@ -1,27 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { AlertTriangle } from "lucide-react";
-
-export default function GlobalError({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function Error({ reset }: { error: Error; reset: () => void }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 text-center">
-      <div className="w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center mb-6">
-        <AlertTriangle className="w-6 h-6 text-destructive" />
-      </div>
-      <h1 className="text-2xl font-bold text-foreground mb-2">Something went wrong</h1>
-      <p className="text-muted-foreground mb-8 max-w-sm">
-        {error.message ?? "An unexpected error occurred. Please try again."}
-      </p>
-      <Button onClick={reset} className="bg-caribbean-500 hover:bg-caribbean-600 text-white">
+    <div className="min-h-screen bg-ocean-950 flex flex-col items-center justify-center px-6 text-white text-center">
+      <p className="text-6xl mb-4">⚠️</p>
+      <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
+      <p className="text-ocean-400 text-sm mb-8">An unexpected error occurred.</p>
+      <button onClick={reset} className="px-6 py-3 bg-caribbean-500 hover:bg-caribbean-600 text-white font-semibold rounded-2xl transition-colors">
         Try again
-      </Button>
+      </button>
     </div>
   );
 }
