@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  ANALYST
+}
+
+enum DataSourceType {
+  POSTGRESQL
+  MYSQL
+  BIGQUERY
+  SNOWFLAKE
+  CSV
+  API
+}
+
+enum LayerStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Company {
+  id          String       @id @default(cuid())
+  name        String
+  users       User[]
+  dataSources DataSource[]
+  prompts     Prompt[]
+  semanticLayers SemanticLayer[]
+  createdAt   DateTime     @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(ANALYST)
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  queries   Query[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId])
+}
+
+model DataSource {
+  id              String         @id @default(cuid())
+  name            String
+  type            DataSourceType
+  companyId       String
+  company         Company        @relation(fields: [companyId], references: [id])
+  schemaMetadata  Json?
+  instructions    String?
+  configEncrypted String
+  queries         Query[]
+  semanticLayers  SemanticLayer[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([companyId])
+}
+
+model Query {
+  id           String      @id @default(cuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  dataSourceId String?
+  dataSource   DataSource? @relation(fields: [dataSourceId], references: [id])
+  queryText    String
+  generatedSql String?
+  confidence   Float?
+  chartType    String?
+  chartData    Json?
+  nlAnswer     String?
+  rowCount     Int         @default(0)
+  executionMs  Int         @default(0)
+  createdAt    DateTime    @default(now())
+
+  @@index([userId])
+  @@index([dataSourceId])
+}
+
+model Prompt {
+  id        String          @id @default(cuid())
+  name      String
+  template  String
+  variables Json            @default("[]")
+  tags      String[]
+  companyId String
+  company   Company         @relation(fields: [companyId], references: [id])
+  versions  PromptVersion[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([companyId])
+}
+
+model PromptVersion {
+  id        String   @id @default(cuid())
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  template  String
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([promptId])
+}
+
+model SemanticLayer {
+  id           String      @id @default(cuid())
+  companyId    String
+  company      Company     @relation(fields: [companyId], references: [id])
+  dataSourceId String
+  dataSource   DataSource  @relation(fields: [dataSourceId], references: [id])
+  metrics      Json        @default("[]")
+  dimensions   Json        @default("[]")
+  joins        Json        @default("[]")
+  status       LayerStatus @default(DRAFT)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([companyId, dataSourceId])
+  @@index([companyId])
+}
